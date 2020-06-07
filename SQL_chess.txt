@@ -52,6 +52,9 @@ CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)));
 INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 2, 2);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 6, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(10, 6, 5);
 
 SELECT * FROM chessboard;
 
@@ -59,4 +62,10 @@ SELECT * FROM chessboard;
 SELECT COUNT(*) FROM chessboard; -- !!! 1 TASK
 
 -- Вывести id фигур, чьи названия начинаются на букву k.
-SELECT id FROM chessman where type_of LIKE 'k%'; -- !!! 2 TASK
+SELECT id FROM chessman WHERE type_of LIKE 'k%'; -- !!! 2 TASK
+
+-- Вывести id белых пешек , стоящих на доске.
+SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "white" AND type_of = "pawn"; -- !!! 4 TASK
+
+-- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет.
+SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y -- !!! 5 TASK
