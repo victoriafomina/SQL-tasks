@@ -58,25 +58,35 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(10, 6, 5);
 
 SELECT * FROM chessboard;
 
--- Сколько фигур стоит на доске? Вывести количество.
-SELECT COUNT(*) FROM chessboard; -- !!! 1 TASK
+-- Сколько фигур стоит на доске? Вывести количество. -- !!! 1 TASK
+SELECT COUNT(*) FROM chessboard;
 
--- Вывести id фигур, чьи названия начинаются на букву k.
-SELECT id FROM chessman WHERE type_of LIKE 'k%'; -- !!! 2 TASK
+-- Вывести id фигур, чьи названия начинаются на букву k. -- !!! 2 TASK
+SELECT id FROM chessman WHERE type_of LIKE 'k%';
 
 -- Какие типы фигур бывают и по сколько штук? Вывести тип и количество. -- !!! 3 TASK
+SELECT type_of, COUNT(type_of) FROM chessman GROUP BY type_of;
 
+-- Вывести id белых пешек , стоящих на доске. -- !!! 4 TASK
+SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "white" AND type_of = "pawn";
 
+-- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет. -- !!! 5 TASK
+SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y;
 
--- Вывести id белых пешек , стоящих на доске.
-SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "white" AND type_of = "pawn"; -- !!! 4 TASK
-
--- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет.
-SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y; -- !!! 5 TASK
+-- Найдите общее количество фигур, оставшихся у каждого игрока. Вывести цвет и количество. -- !!! 6 TASK
+SELECT color, COUNT(color) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color;
 
 -- Какие фигуры черных имеются на доске? Вывести тип. -- !!! 7 TASK
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "black";
 
+-- Какие фигуры черных имеются на доске? Вывести тип и количество.
+
+
+
+
 -- Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. -- !!! 9 TASK
+SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY type_of HAVING COUNT(type_of) >= 2;
 
 -- Вывести цвет фигур, которых на доске больше. -- !!! 10 TASK
+
+-- Найти фигуры, которые может съесть ладья (Cid ладьи задан). Помните, что «своих» есть нельзя! -- !!! 16 TASK
