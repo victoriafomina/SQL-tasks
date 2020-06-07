@@ -2,6 +2,7 @@
 
 CREATE TABLE chessman(id INT PRIMARY KEY AUTO_INCREMENT, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
 CHECK(type_of IN ("king", "queen", "rook", "bishop", "knight", "pawn") and color IN ("black", "white")));
+
 INSERT INTO chessman(type_of, color) VALUES("rook", "black");
 INSERT INTO chessman(type_of, color) VALUES("rook", "black");
 INSERT INTO chessman(type_of, color) VALUES("rook", "white");
@@ -34,6 +35,11 @@ INSERT INTO chessman(type_of, color) VALUES("king", "black");
 
 INSERT INTO chessman(type_of, color) VALUES("queen", "white");
 INSERT INTO chessman(type_of, color) VALUES("queen", "black"); 
+
+INSERT INTO chessman(type_of, color) VALUES("knight", "black"); -- knight - конь
+INSERT INTO chessman(type_of, color) VALUES("knight", "black");
+INSERT INTO chessman(type_of, color) VALUES("knight", "white");
+INSERT INTO chessman(type_of, color) VALUES("knight", "white"); 
 
 
 SELECT * FROM chessman;
