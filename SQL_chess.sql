@@ -64,8 +64,19 @@ SELECT COUNT(*) FROM chessboard; -- !!! 1 TASK
 -- Вывести id фигур, чьи названия начинаются на букву k.
 SELECT id FROM chessman WHERE type_of LIKE 'k%'; -- !!! 2 TASK
 
+-- Какие типы фигур бывают и по сколько штук? Вывести тип и количество. -- !!! 3 TASK
+
+
+
 -- Вывести id белых пешек , стоящих на доске.
 SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "white" AND type_of = "pawn"; -- !!! 4 TASK
 
 -- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет.
-SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y -- !!! 5 TASK
+SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y; -- !!! 5 TASK
+
+-- Какие фигуры черных имеются на доске? Вывести тип. -- !!! 7 TASK
+SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "black";
+
+-- Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. -- !!! 9 TASK
+
+-- Вывести цвет фигур, которых на доске больше. -- !!! 10 TASK
