@@ -1,0 +1,41 @@
+-- Создание и наполнение таблиц.
+
+CREATE TABLE chessman(id INT PRIMARY KEY AUTO_INCREMENT, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
+CHECK(type_of IN ("king", "queen", "rook", "bishop", "knight", "pawn") and color IN ("black", "white")));
+INSERT INTO chessman(type_of, color) VALUES("rook", "black");
+INSERT INTO chessman(type_of, color) VALUES("rook", "black");
+INSERT INTO chessman(type_of, color) VALUES("rook", "white");
+INSERT INTO chessman(type_of, color) VALUES("rook", "white"); 
+INSERT INTO chessman(type_of, color) VALUES("bishop", "black"); -- bishop - слон
+INSERT INTO chessman(type_of, color) VALUES("bishop", "black");
+INSERT INTO chessman(type_of, color) VALUES("bishop", "white");
+INSERT INTO chessman(type_of, color) VALUES("bishop", "white"); 
+
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black"); -- pawn - пешка
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
+INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
+
+INSERT INTO chessman(type_of, color) VALUES("king", "white");
+INSERT INTO chessman(type_of, color) VALUES("king", "black"); 
+
+INSERT INTO chessman(type_of, color) VALUES("queen", "white");
+INSERT INTO chessman(type_of, color) VALUES("queen", "black"); 
+
+
+SELECT * FROM chessman;
+
+CREATE TABLE chessboard(x INT, y INT, chessmanId INT PRIMARY KEY);
