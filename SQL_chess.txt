@@ -1,7 +1,7 @@
--- Создание и наполнение таблиц.
-
 CREATE TABLE chessman(id INT PRIMARY KEY AUTO_INCREMENT, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
-CHECK(type_of IN ("king", "queen", "rook", "bishop", "knight", "pawn") and color IN ("black", "white")));
+CHECK(type_of IN ("king", "queen", "rook", "bishop", "knight", "pawn") AND color IN ("black", "white")));
+
+-- Таблица фигур.
 
 INSERT INTO chessman(type_of, color) VALUES("rook", "black");
 INSERT INTO chessman(type_of, color) VALUES("rook", "black");
@@ -44,4 +44,15 @@ INSERT INTO chessman(type_of, color) VALUES("knight", "white");
 
 SELECT * FROM chessman;
 
-CREATE TABLE chessboard(x INT, y INT, chessmanId INT PRIMARY KEY);
+CREATE TABLE chessboard(id_chessman INT, x INT CHECK(x > 0 AND x < 9), y INT CHECK(y > 0 AND y < 9), FOREIGN KEY (id_chessman) REFERENCES chessman(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)));
+
+-- Таблица фигур, стоящих на доске.
+
+INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
+
+SELECT * FROM chessboard;
+
+SELECT COUNT(*) FROM chessboard; -- !!! 1 TASK
