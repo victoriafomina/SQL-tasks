@@ -55,4 +55,8 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
 
 SELECT * FROM chessboard;
 
+-- Сколько фигур стоит на доске? Вывести количество.
 SELECT COUNT(*) FROM chessboard; -- !!! 1 TASK
+
+-- Вывести id фигур, чьи названия начинаются на букву k.
+SELECT id FROM chessman where type_of LIKE 'k%'; -- !!! 2 TASK
