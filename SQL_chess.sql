@@ -71,8 +71,8 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 4, 3);
 
 INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 5, 4);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 2, 5);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 5, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 5, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
 
 SELECT * FROM chessboard;
 
@@ -133,14 +133,9 @@ SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id
 -- a) через JOIN
 -- b) через UNION/INTERSECT/EXCEPT 
 
---SELECT 'AAAAAAAAAAAAA';
-
 -- 13) a
-
-
-
-        
---SELECT 'AAAAAAAAAAAAA';
+SELECT board1.id_chessman FROM chessboard board1 LEFT JOIN chessboardAft board2 ON board1.id_chessman = board2.id_chessman WHERE
+        board1.x != board2.x OR board1.y != board2.y OR board2.id_chessman is NULL;
         
 -- 13) b
 -- Скушанные и перемещенные фигуры.
