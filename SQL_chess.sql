@@ -66,12 +66,12 @@ INSERT INTO chessboardAft(id_chessman, x, y) VALUES(25, 6, 5);
 
 -- Таблица фигур, стоящих на доске.
 
-INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 5, 3); -- ладья
 INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 4, 3);
 
 INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 5, 4);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 4, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 2, 5);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 5, 5);
 
 SELECT * FROM chessboard;
@@ -125,14 +125,14 @@ SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id
 -- a) через JOIN
 -- b) через UNION/INTERSECT/EXCEPT 
 
-SELECT 'AAAAAAAAAAAAA';
+--SELECT 'AAAAAAAAAAAAA';
 
 -- 13) a
 
 
 
         
-SELECT 'AAAAAAAAAAAAA';
+--SELECT 'AAAAAAAAAAAAA';
         
 -- 13) b
 -- Скушанные и перемещенные фигуры.
@@ -151,8 +151,10 @@ SELECT TOP(1) WITH TIES board2.id_chessman FROM chessman figures, chessboard boa
         AND figures.color = 'white'AND board1.id_chessman = figures.id AND board1.id_chessman != board2.id_chessman 
         ORDER BY (ABS(board2.x - board1.x) + ABS(board2.y - board1.y)) ASC;
 
-
-
 -- 16) Найти фигуры, которые может съесть ладья (Cid ладьи задан). Помните, что «своих» есть нельзя!
+SELECT board2.id_chessman FROM chessman figureRook, chessman figuresRest, chessboard board1, chessboard board2 WHERE board1.id_chessman = 1 
+        AND figureRook.id = 1 AND board2.id_chessman = figuresRest.id AND figureRook.color != figuresRest.color
+        AND board2.id_chessman != 1 AND 
+        ((board2.x - board1.x = 0) OR (board2.y - board1.y = 0));
 
 
