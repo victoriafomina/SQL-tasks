@@ -76,48 +76,48 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
 
 SELECT * FROM chessboard;
 
--- Сколько фигур стоит на доске? Вывести количество. -- !!! 1 TASK
+-- 1) Сколько фигур стоит на доске? Вывести количество.
 SELECT COUNT(*) AS count_figures_on_chessboard FROM chessboard;
 
--- Вывести id фигур, чьи названия начинаются на букву k. -- !!! 2 TASK
+-- 2) Вывести id фигур, чьи названия начинаются на букву k. 
 SELECT id FROM chessman WHERE type_of LIKE 'k%';
 
--- Какие типы фигур бывают и по сколько штук? Вывести тип и количество. -- !!! 3 TASK
+-- 3) Какие типы фигур бывают и по сколько штук? Вывести тип и количество. 
 SELECT type_of, COUNT(type_of) AS count FROM chessman GROUP BY type_of;
 
--- Вывести id белых пешек , стоящих на доске. -- !!! 4 TASK
+-- 4) Вывести id белых пешек , стоящих на доске. 
 SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'white' AND type_of = 'pawn';
 
--- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет. -- !!! 5 TASK
+-- 5) Какие фигуры стоят на главной диагонали? Вывести их тип и цвет.
 SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y;
 
--- Найдите общее количество фигур, оставшихся у каждого игрока. Вывести цвет и количество. -- !!! 6 TASK
+-- 6) Найдите общее количество фигур, оставшихся у каждого игрока. Вывести цвет и количество.
 SELECT color, COUNT(color) AS count FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color;
 
--- Какие фигуры черных имеются на доске? Вывести тип. -- !!! 7 TASK
+-- 7) Какие фигуры черных имеются на доске? Вывести тип. 
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black';
 
--- Какие фигуры черных имеются на доске? Вывести тип и количество. -- !!! 8 TASK
+-- 8) Какие фигуры черных имеются на доске? Вывести тип и количество. 
 SELECT type_of, COUNT(type_of) AS count FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black' GROUP BY type_of;
 
--- Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. -- !!! 9 TASK
+-- 9) Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. 
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY type_of HAVING COUNT(type_of) >= 2;
 
--- Вывести цвет фигур, которых на доске больше. -- !!! 10 TASK
+-- 10) Вывести цвет фигур, которых на доске больше. 
 SELECT TOP(1) WITH TIES color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color ORDER BY COUNT(color);
 
--- Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или по вертикали
--- относительно своего положения на доске в любом направлении.). -- !!! 11 TASK
+-- 11) Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или по вертикали
+-- относительно своего положения на доске в любом направлении.). 
 
 
 
 
 
--- У каких игроков (цвета) еще остались ВСЕ пешки (pawn)? -- !!! 12 TASK
+-- 12) У каких игроков (цвета) еще остались ВСЕ пешки (pawn)? 
 SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id_chessman AND type_of = 'pawn') GROUP BY color
         HAVING COUNT(color) = 8;
         
--- Пусть отношения board1 и board2 представляют собой два последовательных состояние игры (Chessboard). Какие фигуры (cid) изменили свою 
+-- 13) Пусть отношения board1 и board2 представляют собой два последовательных состояние игры (Chessboard). Какие фигуры (cid) изменили свою 
 -- позицию (за один ход это может быть передвигаемая фигура и возможно еще фигура, которая была “съедена”)?
 -- В отношение Chessboard2 надо скопировать все строки отношения Chessboard. Из Chessboard2 надо одну фигуру удалить, а другую фигуру 
 -- поставить на место удаленной («съесть фигуру»).
@@ -125,18 +125,25 @@ SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id
 -- a) через JOIN
 -- b) через UNION/INTERSECT/EXCEPT 
 
--- !!! 13 a TASK
+SELECT 'AAAAAAAAAAAAA';
+
+-- 13) a
         
--- !!! 13 b TASK 
+SELECT 'AAAAAAAAAAAAA';
+        
+-- 13) b
 -- Скушанные и перемещенные фигуры.
 SELECT id_chessman FROM chessboard EXCEPT SELECT id_chessman FROM chessboardAft UNION SELECT chessboard.id_chessman FROM 
         chessboard, chessboardAft WHERE chessboard.id_chessman = chessboardAft.id_chessman AND 
         (chessboard.x != chessboardAft.x OR chessboard.y != chessboardAft.y);
+        
+-- 14) Вывести id фигуры, если она стоит в «опасной близости» от черного короля? «опасной близостью» будем считать квадрат 5х5 с 
+-- королем в центре.
 
--- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
--- !!! 15 TASK
+-- 15) Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
 
 
 
--- Найти фигуры, которые может съесть ладья (Cid ладьи задан). Помните, что «своих» есть нельзя! -- !!! 16 TASK
+-- 16) Найти фигуры, которые может съесть ладья (Cid ладьи задан). Помните, что «своих» есть нельзя!
+
 
