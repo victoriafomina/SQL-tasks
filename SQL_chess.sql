@@ -70,9 +70,9 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
 
-INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 4, 4);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 5, 5);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(26, 6, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 5, 4);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 4, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 5, 5);
 
 SELECT * FROM chessboard;
 
@@ -147,6 +147,9 @@ SELECT board2.id_chessman FROM chessman figures, chessboard board1, chessboard b
         ABS(board2.y - board1.y) <= 2;
  
 -- 15) Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
+SELECT TOP(1) WITH TIES board2.id_chessman FROM chessman figures, chessboard board1, chessboard board2 WHERE figures.type_of = 'king' 
+        AND figures.color = 'white'AND board1.id_chessman = figures.id AND board1.id_chessman != board2.id_chessman 
+        ORDER BY (ABS(board2.x - board1.x) + ABS(board2.y - board1.y)) ASC;
 
 
 
