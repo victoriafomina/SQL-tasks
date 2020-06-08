@@ -8,49 +8,49 @@ CREATE TABLE chessman(id INT IDENTITY(1, 1) PRIMARY KEY, type_of VARCHAR(10) NOT
 
 -- Таблица фигур.
 
-INSERT INTO chessman(type_of, color) VALUES('rook', 'black');
-INSERT INTO chessman(type_of, color) VALUES('rook', 'black');
-INSERT INTO chessman(type_of, color) VALUES('rook', 'white');
-INSERT INTO chessman(type_of, color) VALUES('rook', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('rook', 'black'); -- 1
+INSERT INTO chessman(type_of, color) VALUES('rook', 'black'); -- 2
+INSERT INTO chessman(type_of, color) VALUES('rook', 'white'); -- 3
+INSERT INTO chessman(type_of, color) VALUES('rook', 'white'); -- 4
 INSERT INTO chessman(type_of, color) VALUES('bishop', 'black'); -- bishop - слон
-INSERT INTO chessman(type_of, color) VALUES('bishop', 'black');
-INSERT INTO chessman(type_of, color) VALUES('bishop', 'white');
-INSERT INTO chessman(type_of, color) VALUES('bishop', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'black'); -- 6
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'white'); -- 7
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'white'); -- 8
 
 INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- pawn - пешка
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 10
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 11
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 12
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 13
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 14
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 15
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- 16
 
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
-INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 17
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 18
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 19
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 20
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 21
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 22
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 23
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); -- 24
 
-INSERT INTO chessman(type_of, color) VALUES('king', 'white');
-INSERT INTO chessman(type_of, color) VALUES('king', 'black'); 
+INSERT INTO chessman(type_of, color) VALUES('king', 'white'); -- 25
+INSERT INTO chessman(type_of, color) VALUES('king', 'black'); -- 26
 
-INSERT INTO chessman(type_of, color) VALUES('queen', 'white');
-INSERT INTO chessman(type_of, color) VALUES('queen', 'black'); 
+INSERT INTO chessman(type_of, color) VALUES('queen', 'white'); -- 27
+INSERT INTO chessman(type_of, color) VALUES('queen', 'black'); -- 28
 
 INSERT INTO chessman(type_of, color) VALUES('knight', 'black'); -- knight - конь
-INSERT INTO chessman(type_of, color) VALUES('knight', 'black');
-INSERT INTO chessman(type_of, color) VALUES('knight', 'white');
-INSERT INTO chessman(type_of, color) VALUES('knight', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('knight', 'black'); -- 30
+INSERT INTO chessman(type_of, color) VALUES('knight', 'white'); -- 31
+INSERT INTO chessman(type_of, color) VALUES('knight', 'white'); -- 32
 
 
 SELECT * FROM chessman;
 
 CREATE TABLE chessboard(id_chessman INT, x INT CHECK(x > 0 AND x < 9), y INT CHECK(y > 0 AND y < 9), FOREIGN KEY (id_chessman) REFERENCES chessman(id) ON DELETE CASCADE ON UPDATE CASCADE, 
-        CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)));
+        CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)), UNIQUE (x, y));
 
 -- Таблица фигур, стоящих на доске.
 
@@ -59,7 +59,7 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
 
 INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 2, 2);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 6, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 5, 5);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
 
 SELECT * FROM chessboard;
@@ -104,8 +104,22 @@ SELECT TOP(1) WITH TIES color FROM chessman INNER JOIN chessboard ON chessman.id
 -- У каких игроков (цвета) еще остались ВСЕ пешки (pawn)? -- !!! 12 TASK
 SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id_chessman AND type_of = 'pawn') GROUP BY color
         HAVING COUNT(color) = 8;
+        
+-- Пусть отношения board1 и board2 представляют собой два последовательных состояние игры (Chessboard). Какие фигуры (cid) изменили свою 
+-- позицию (за один ход это может быть передвигаемая фигура и возможно еще фигура, которая была “съедена”)?
+-- В отношение Chessboard2 надо скопировать все строки отношения Chessboard. Из Chessboard2 надо одну фигуру удалить, а другую фигуру 
+-- поставить на место удаленной («съесть фигуру»).
+-- Задание надо выполнить двумя способами:
+-- a) через JOIN
+-- b) через UNION/INTERSECT/EXCEPT        
+        
+-- !!! 13 a TASK
 
--- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. -- !!! 15 TASK
+
+
+
+-- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
+-- !!! 15 TASK
 
 
 
