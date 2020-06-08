@@ -76,6 +76,14 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 5, 5);
 
 SELECT * FROM chessboard;
 
+-- ************************
+-- ************************
+-- ************************
+-- ЗДЕСЬ НАЧИНАЮТCЯ ЗАПРОСЫ
+-- ************************
+-- ************************
+-- ************************
+
 -- 1) Сколько фигур стоит на доске? Вывести количество.
 SELECT COUNT(*) AS count_figures_on_chessboard FROM chessboard;
 
@@ -156,5 +164,6 @@ SELECT board2.id_chessman FROM chessman figureRook, chessman figuresRest, chessb
         AND figureRook.id = 1 AND board2.id_chessman = figuresRest.id AND figureRook.color != figuresRest.color
         AND board2.id_chessman != 1 AND 
         ((board2.x - board1.x = 0) OR (board2.y - board1.y = 0));
+
 
 
