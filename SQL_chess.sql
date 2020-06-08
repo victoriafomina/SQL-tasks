@@ -1,45 +1,50 @@
-CREATE TABLE chessman(id INT PRIMARY KEY AUTO_INCREMENT, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
-CHECK(type_of IN ("king", "queen", "rook", "bishop", "knight", "pawn") AND color IN ("black", "white")));
+--Sql Server 2014 Express Edition
+--Batches are separated by 'go'
+
+select @@version as 'sql server version'
+
+CREATE TABLE chessman(id INT IDENTITY(1, 1) PRIMARY KEY, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
+CHECK(type_of IN ('king', 'queen', 'rook', 'bishop', 'knight', 'pawn') AND color IN ('black', 'white')));
 
 -- Таблица фигур.
 
-INSERT INTO chessman(type_of, color) VALUES("rook", "black");
-INSERT INTO chessman(type_of, color) VALUES("rook", "black");
-INSERT INTO chessman(type_of, color) VALUES("rook", "white");
-INSERT INTO chessman(type_of, color) VALUES("rook", "white"); 
-INSERT INTO chessman(type_of, color) VALUES("bishop", "black"); -- bishop - слон
-INSERT INTO chessman(type_of, color) VALUES("bishop", "black");
-INSERT INTO chessman(type_of, color) VALUES("bishop", "white");
-INSERT INTO chessman(type_of, color) VALUES("bishop", "white"); 
+INSERT INTO chessman(type_of, color) VALUES('rook', 'black');
+INSERT INTO chessman(type_of, color) VALUES('rook', 'black');
+INSERT INTO chessman(type_of, color) VALUES('rook', 'white');
+INSERT INTO chessman(type_of, color) VALUES('rook', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'black'); -- bishop - слон
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'black');
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'white');
+INSERT INTO chessman(type_of, color) VALUES('bishop', 'white'); 
 
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black"); -- pawn - пешка
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "black");
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black'); -- pawn - пешка
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'black');
 
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white");
-INSERT INTO chessman(type_of, color) VALUES("pawn", "white"); 
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white');
+INSERT INTO chessman(type_of, color) VALUES('pawn', 'white'); 
 
-INSERT INTO chessman(type_of, color) VALUES("king", "white");
-INSERT INTO chessman(type_of, color) VALUES("king", "black"); 
+INSERT INTO chessman(type_of, color) VALUES('king', 'white');
+INSERT INTO chessman(type_of, color) VALUES('king', 'black'); 
 
-INSERT INTO chessman(type_of, color) VALUES("queen", "white");
-INSERT INTO chessman(type_of, color) VALUES("queen", "black"); 
+INSERT INTO chessman(type_of, color) VALUES('queen', 'white');
+INSERT INTO chessman(type_of, color) VALUES('queen', 'black'); 
 
-INSERT INTO chessman(type_of, color) VALUES("knight", "black"); -- knight - конь
-INSERT INTO chessman(type_of, color) VALUES("knight", "black");
-INSERT INTO chessman(type_of, color) VALUES("knight", "white");
-INSERT INTO chessman(type_of, color) VALUES("knight", "white"); 
+INSERT INTO chessman(type_of, color) VALUES('knight', 'black'); -- knight - конь
+INSERT INTO chessman(type_of, color) VALUES('knight', 'black');
+INSERT INTO chessman(type_of, color) VALUES('knight', 'white');
+INSERT INTO chessman(type_of, color) VALUES('knight', 'white'); 
 
 
 SELECT * FROM chessman;
@@ -68,7 +73,7 @@ SELECT id FROM chessman WHERE type_of LIKE 'k%';
 SELECT type_of, COUNT(type_of) FROM chessman GROUP BY type_of;
 
 -- Вывести id белых пешек , стоящих на доске. -- !!! 4 TASK
-SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "white" AND type_of = "pawn";
+SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'white' AND type_of = 'pawn';
 
 -- Какие фигуры стоят на главной диагонали? Вывести их тип и цвет. -- !!! 5 TASK
 SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y;
@@ -77,16 +82,16 @@ SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chess
 SELECT color, COUNT(color) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color;
 
 -- Какие фигуры черных имеются на доске? Вывести тип. -- !!! 7 TASK
-SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "black";
+SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black';
 
 -- Какие фигуры черных имеются на доске? Вывести тип и количество. -- !!! 8 TASK
-SELECT type_of, COUNT(type_of) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = "black" GROUP BY type_of;
+SELECT type_of, COUNT(type_of) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black' GROUP BY type_of;
 
 -- Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. -- !!! 9 TASK
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY type_of HAVING COUNT(type_of) >= 2;
 
 -- Вывести цвет фигур, которых на доске больше. -- !!! 10 TASK
-SELECT color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color ORDER BY COUNT(color) DESC LIMIT 1;
+SELECT TOP(1) WITH TIES color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color ORDER BY COUNT(color);
 
 -- Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или по вертикали
 -- относительно своего положения на доске в любом направлении.). -- !!! 11 TASK
