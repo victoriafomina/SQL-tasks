@@ -106,12 +106,12 @@ SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.i
 -- 10) Вывести цвет фигур, которых на доске больше. 
 SELECT TOP(1) WITH TIES color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color ORDER BY COUNT(color);
 
--- 11) Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или по вертикали
--- относительно своего положения на доске в любом направлении.). 
+-- 11) Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или 
+-- по вертикали относительно своего положения на доске в любом направлении.). 
 
-
-
-
+SELECT boardRestFigures.id_chessman FROM chessman figures, chessboard boardRook, chessboard boardRestFigures WHERE
+        figures.id = 1 AND boardRook.id_chessman = 1 AND boardRestFigures.id_chessman != 1 and 
+        ((boardRook.x - boardRestFigures.x = 0) OR (boardRook.y - boardRestFigures.y = 0));
 
 -- 12) У каких игроков (цвета) еще остались ВСЕ пешки (pawn)? 
 SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id_chessman AND type_of = 'pawn') GROUP BY color
