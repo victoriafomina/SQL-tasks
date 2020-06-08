@@ -54,7 +54,7 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 2, 2);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 6, 5);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(10, 6, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
 
 SELECT * FROM chessboard;
 
@@ -87,6 +87,13 @@ SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.i
 
 -- Вывести цвет фигур, которых на доске больше. -- !!! 10 TASK
 SELECT color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color ORDER BY COUNT(color) DESC LIMIT 1;
+
+-- Найдите фигуры, которые стоят на возможном пути движения ладьи (rock) (Любой ладьи любого цвета). (Ладья может двигаться по горизонтали или по вертикали
+-- относительно своего положения на доске в любом направлении.). -- !!! 11 TASK
+
+
+
+-- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. -- !!! 15 TASK
 
 
 
