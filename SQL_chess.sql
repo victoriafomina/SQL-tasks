@@ -70,9 +70,9 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
 
-INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 2, 2);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 4, 4);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 5, 5);
-INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
+INSERT INTO chessboard(id_chessman, x, y) VALUES(26, 6, 5);
 
 SELECT * FROM chessboard;
 
@@ -128,6 +128,9 @@ SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id
 SELECT 'AAAAAAAAAAAAA';
 
 -- 13) a
+
+
+
         
 SELECT 'AAAAAAAAAAAAA';
         
@@ -139,7 +142,10 @@ SELECT id_chessman FROM chessboard EXCEPT SELECT id_chessman FROM chessboardAft 
         
 -- 14) Вывести id фигуры, если она стоит в «опасной близости» от черного короля? «опасной близостью» будем считать квадрат 5х5 с 
 -- королем в центре.
-
+SELECT board2.id_chessman FROM chessman figures, chessboard board1, chessboard board2 WHERE figures.type_of = 'king' AND figures.color = 'black'AND
+        board1.id_chessman = figures.id AND board1.id_chessman != board2.id_chessman AND ABS(board2.x - board1.x) <= 2 AND 
+        ABS(board2.y - board1.y) <= 2;
+ 
 -- 15) Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
 
 
