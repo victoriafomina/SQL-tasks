@@ -178,24 +178,77 @@ SELECT board2.id_chessman FROM chessman figureRook, chessman figuresRest, chessb
 -- Процедура – «сделать ход». Если мы встали на клетку, где стояла фигура другого
 -- цвета, то «съесть» ее, если своего, то такой ход делать нельзя.
 
-/*
-GO
-CREATE PROCEDURE MakeMove(@x1 INT, @y1 INT, @x2 INT, @y2 INT) AS
-BEGIN
+
+--GO
+--CREATE PROCEDURE MakeMove(@x1 INT, @y1 INT, @x2 INT, @y2 INT) AS
+--BEGIN
     -- Проверяем, находится ли кто-то в клетке, из которой собираемся сделать ход.
-    IF (SELECT COUNT(id_chessman) FROM chessboard WHERE chessboard.x = @x1 AND chessboard.y = @y1) > 0
+--    IF (SELECT COUNT(id_chessman) FROM chessboard WHERE chessboard.x = @x1 AND chessboard.y = @y1) > 0
     -- Случай, когда мы хотим встать в клетку, где стоит "наша" фигура.
-        IF (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND board.x = @x1 AND 
-                board.y = @y1) = (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND 
-                board.x = @x2 AND board.y = @y2)
-            SELECT 'Такой ход невозможен! Вы не можете съесть "свою" фигуру!';
-        ELSE -- Хотим перейти в клетку, где стоит другая фигура - "съедим" ее.
-            DELETE FROM chessboard WHERE x = @x2 AND y = @y2;
-            UPDATE chessboard SET x = @x2, y = @y2 WHERE x = @x1 AND y = @y1;
-            RETURN;
-    ELSE -- В клетке, из которой мы собираемся "пойти", никого нет.
-        SELECT 'Такой ход невозможен! Вы не можете сделать ход из клетки, в которой нет фигуры!';
-END
+--        IF (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND board.x = @x1 AND 
+--                board.y = @y1) = (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND 
+--                board.x = @x2 AND board.y = @y2)
+--            SELECT 'Такой ход невозможен! Вы не можете съесть "свою" фигуру!';
+--        ELSE -- Хотим перейти в клетку, где стоит другая фигура - "съедим" ее.
+--            DELETE FROM chessboard WHERE x = @x2 AND y = @y2;
+--            UPDATE chessboard SET x = @x2, y = @y2 WHERE x = @x1 AND y = @y1;
+--            RETURN;
+--    ELSE -- В клетке, из которой мы собираемся "пойти", никого нет.
+--        SELECT 'Такой ход невозможен! Вы не можете сделать ход из клетки, в которой нет фигуры!';
+--END
+
+
+
+
+
+-- ************************
+-- ************************
+-- ************************
+-- ФУНКЦИЯ
+-- ************************
+-- ************************
+-- ************************
+
+-- Функция-таблица, имеет параметр ID фигуры. В качестве результата выдает
+-- фигуры противника, которого может съесть заданная фигура. Т.к. фигур много, и
+-- правила “съедания” для каждого типа фигур свои, можно ограничиться одним
+-- типом фигур (например, слоны, ладьи и пр.) Про фигуры, которые можем съесть,
+-- выводим следующую информацию: ID, тип, Х, У.
+
+-- Задачу будем решать для ладьи.
+GO
+CREATE FUNCTION FiguresPossibleToEat(@id INT) 
+RETURNS TABLE
+
+RETURN(
+        SELECT board2.id_chessman, figures.type_of, board2.x, board2.y FROM chessman figures, chessboard board1, chessboard board2 
+        WHERE @id = figures.id AND @id = board1.id_chessman AND board1.id_chessman != board2.id_chessman AND 
+        ((board1.x - board2.x = 0) OR (board1.y - board2.y = 0))
+);
+
+
+
+
+
+-- ************************
+-- ************************
+-- ************************
+-- ТРИГГЕР
+-- ************************
+-- ************************
+-- ************************
+
+/*
+Триггер
+Создать файл для записи истории шахматной партии. Структура таблицы:
+1) идентификатор хода,
+2) время (TIMESTAMP),
+3) ID фигуры,
+4) новая X координата,
+5) новая Y координата.
+Для тех фигур, которые были съедены, новые координаты становятся незаданным
+значением.
+При каждом ходе записывать изменения в таблице истории.
 */
 
 
