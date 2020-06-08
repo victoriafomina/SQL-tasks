@@ -4,7 +4,7 @@
 select @@version as 'sql server version'
 
 CREATE TABLE chessman(id INT IDENTITY(1, 1) PRIMARY KEY, type_of VARCHAR(10) NOT NULL, color VARCHAR(15) NOT NULL, 
-CHECK(type_of IN ('king', 'queen', 'rook', 'bishop', 'knight', 'pawn') AND color IN ('black', 'white')));
+        CHECK(type_of IN ('king', 'queen', 'rook', 'bishop', 'knight', 'pawn') AND color IN ('black', 'white')));
 
 -- Таблица фигур.
 
@@ -50,13 +50,14 @@ INSERT INTO chessman(type_of, color) VALUES('knight', 'white');
 SELECT * FROM chessman;
 
 CREATE TABLE chessboard(id_chessman INT, x INT CHECK(x > 0 AND x < 9), y INT CHECK(y > 0 AND y < 9), FOREIGN KEY (id_chessman) REFERENCES chessman(id) ON DELETE CASCADE ON UPDATE CASCADE, 
-CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)));
+        CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)));
 
 -- Таблица фигур, стоящих на доске.
 
 INSERT INTO chessboard(id_chessman, x, y) VALUES(1, 1, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(5, 7, 1);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(9, 3, 4);
+
 INSERT INTO chessboard(id_chessman, x, y) VALUES(17, 2, 2);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(19, 6, 5);
 INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
@@ -98,8 +99,15 @@ SELECT TOP(1) WITH TIES color FROM chessman INNER JOIN chessboard ON chessman.id
 
 
 
+
+
+-- У каких игроков (цвета) еще остались ВСЕ пешки (pawn)? -- !!! 12 TASK
+SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id_chessman AND type_of = 'pawn') GROUP BY color
+        HAVING COUNT(color) = 8;
+
 -- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. -- !!! 15 TASK
 
 
 
 -- Найти фигуры, которые может съесть ладья (Cid ладьи задан). Помните, что «своих» есть нельзя! -- !!! 16 TASK
+
