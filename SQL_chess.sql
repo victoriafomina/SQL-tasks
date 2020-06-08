@@ -64,13 +64,13 @@ INSERT INTO chessboard(id_chessman, x, y) VALUES(25, 6, 5);
 SELECT * FROM chessboard;
 
 -- Сколько фигур стоит на доске? Вывести количество. -- !!! 1 TASK
-SELECT COUNT(*) FROM chessboard;
+SELECT COUNT(*) AS count_figures_on_chessboard FROM chessboard;
 
 -- Вывести id фигур, чьи названия начинаются на букву k. -- !!! 2 TASK
 SELECT id FROM chessman WHERE type_of LIKE 'k%';
 
 -- Какие типы фигур бывают и по сколько штук? Вывести тип и количество. -- !!! 3 TASK
-SELECT type_of, COUNT(type_of) FROM chessman GROUP BY type_of;
+SELECT type_of, COUNT(type_of) AS count FROM chessman GROUP BY type_of;
 
 -- Вывести id белых пешек , стоящих на доске. -- !!! 4 TASK
 SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'white' AND type_of = 'pawn';
@@ -79,13 +79,13 @@ SELECT id FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_che
 SELECT type_of, color FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE x = y;
 
 -- Найдите общее количество фигур, оставшихся у каждого игрока. Вывести цвет и количество. -- !!! 6 TASK
-SELECT color, COUNT(color) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color;
+SELECT color, COUNT(color) AS count FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY color;
 
 -- Какие фигуры черных имеются на доске? Вывести тип. -- !!! 7 TASK
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black';
 
 -- Какие фигуры черных имеются на доске? Вывести тип и количество. -- !!! 8 TASK
-SELECT type_of, COUNT(type_of) FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black' GROUP BY type_of;
+SELECT type_of, COUNT(type_of) AS count FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman WHERE color = 'black' GROUP BY type_of;
 
 -- Найдите типы фигур (любого цвета), которых осталось, по крайней мере, не меньше двух на доске. -- !!! 9 TASK
 SELECT type_of FROM chessman INNER JOIN chessboard ON chessman.id = chessboard.id_chessman GROUP BY type_of HAVING COUNT(type_of) >= 2;
