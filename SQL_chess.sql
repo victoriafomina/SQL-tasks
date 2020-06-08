@@ -51,6 +51,18 @@ SELECT * FROM chessman;
 
 CREATE TABLE chessboard(id_chessman INT, x INT CHECK(x > 0 AND x < 9), y INT CHECK(y > 0 AND y < 9), FOREIGN KEY (id_chessman) REFERENCES chessman(id) ON DELETE CASCADE ON UPDATE CASCADE, 
         CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)), UNIQUE (x, y));
+        
+CREATE TABLE chessboardAft(id_chessman INT, x INT CHECK(x > 0 AND x < 9), y INT CHECK(y > 0 AND y < 9), FOREIGN KEY (id_chessman) REFERENCES chessman(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+        CHECK((x > 0 AND x < 9) AND (y > 0 AND y < 9)), UNIQUE (x, y));
+        
+-- Таблица фигур, оставшихся на доске после сделанного хода.
+INSERT INTO chessboardAft(id_chessman, x, y) VALUES(1, 1, 1);
+INSERT INTO chessboardAft(id_chessman, x, y) VALUES(9, 3, 4);
+
+INSERT INTO chessboardAft(id_chessman, x, y) VALUES(17, 2, 1);
+INSERT INTO chessboardAft(id_chessman, x, y) VALUES(19, 5, 5);
+INSERT INTO chessboardAft(id_chessman, x, y) VALUES(25, 6, 5);
+
 
 -- Таблица фигур, стоящих на доске.
 
@@ -111,12 +123,15 @@ SELECT color FROM chessman INNER JOIN chessboard ON (chessman.id = chessboard.id
 -- поставить на место удаленной («съесть фигуру»).
 -- Задание надо выполнить двумя способами:
 -- a) через JOIN
--- b) через UNION/INTERSECT/EXCEPT        
-        
+-- b) через UNION/INTERSECT/EXCEPT 
+
 -- !!! 13 a TASK
-
-
-
+        
+-- !!! 13 b TASK 
+-- Скушанные и перемещенные фигуры.
+SELECT id_chessman FROM chessboard EXCEPT SELECT id_chessman FROM chessboardAft UNION SELECT chessboard.id_chessman FROM 
+        chessboard, chessboardAft WHERE chessboard.id_chessman = chessboardAft.id_chessman AND 
+        (chessboard.x != chessboardAft.x OR chessboard.y != chessboardAft.y);
 
 -- Найти фигуру, ближе всех стоящую к белому королю (расстояние считаем по метрике L1 – разница координат по X + разница координат по Y. 
 -- !!! 15 TASK
