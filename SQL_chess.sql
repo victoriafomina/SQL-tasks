@@ -170,9 +170,19 @@ SELECT board2.id_chessman FROM chessman figureRook, chessman figuresRest, chessb
 -- цвета, то «съесть» ее, если своего, то такой ход делать нельзя.
 CREATE PROCEDURE MakeMove(@x1 INT, @y1 INT, @x2 INT, @y2 INT) AS
 BEGIN
+    -- Проверяем, находится ли кто-то в клетке, из которой собираемся сделать ход.
     IF SELECT COUNT id_chessman FROM chessboard WHERE chessboard.x = x1 AND chessboard.y = y1
-        
-
+    -- Случай, когда мы хотим встать на клетку, где стоит "наша" фигура.
+        IF (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND board.x = x1 AND 
+                board.y = y1) = (SELECT figures.color FROM chessman figures, chessboard board WHERE figures.id = board.id_chessman AND 
+                board.x = x2 AND board.y = y2)
+            SELECT 'Такой ход невозможен! Вы не можете съесть "свою" фигуру!';
+            RETURN;
+        ELSE -- Хотим перейти в клетку, где стоит другая фигура - "съедим" ее.
+            DELETE FROM chessboard WHERE x = x1 AND y = y1;
+            UPDATE x, y FROM chessboard SET x = x2, y = y2 WHERE x = x1 AND y = y1
+    ELSE -- В клетке, из которой мы собираемся "пойти", никого нет.
+        SELECT 'Такой ход невозможен! Вы не можете сделать ход из клетке, в которой нет фигуры!'
 END
 
 
