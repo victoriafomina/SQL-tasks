@@ -15,15 +15,15 @@ select @@version as 'sql server version'
 
 
 -- Таблица, представляющая человека, ищущего работу.
-CREATE TABLE person(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education_lvl NVARCHAR(25) NOT NULL, salary INT NOT NULL, 
+CREATE TABLE person(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education NVARCHAR(25) NOT NULL, salary INT NOT NULL, 
         seniority INT NOT NULL,            
-        CHECK(education_lvl IN ('no', 'higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 'incomplete h.')));
+        CHECK(education IN ('no', 'higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 'incomplete h.')));
         
                                
 -- Таблица, представляющая вакансию.                               
-CREATE TABLE vacancy(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education_lvl NVARCHAR(25) NOT NULL, salary INT NOT NULL,
+CREATE TABLE vacancy(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education NVARCHAR(25) NOT NULL, salary INT NOT NULL,
                      company NVARCHAR(30) NOT NULL, insurance INT NOT NULL, description NVARCHAR(200),
-                     CHECK(education_lvl IN ('higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 
+                     CHECK(education IN ('higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 
                                              'incomplete h.', 'no') AND insurance IN (0, 1)));
                      
                      
@@ -33,18 +33,19 @@ CREATE TABLE person_vacancy_bindings(id INT IDENTITY(1, 1) PRIMARY KEY, id_perso
                                      FOREIGN KEY (id_vacancy) REFERENCES vacancy(id) ON DELETE CASCADE ON UPDATE CASCADE);
                                      
 
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'higher', 80000, 2);
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('ololo', 'no', 80000, 2);
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'secondary', 80000, 1);
-INSERT INTO person(position, education_lvl, salary,seniority) VALUES ('progr', 'secondary', 70000, 3);
+INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'higher', 80000, 2);
+INSERT INTO person(position, education, salary, seniority) VALUES ('ololo', 'no', 80000, 2);
+INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'secondary', 80000, 1);
+INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 70000, 3);
+INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 90000, 3);
 
                                      
                                      
-INSERT INTO vacancy(position, education_lvl, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'GOOGLE', 1, 'cool');
-INSERT INTO vacancy(position, education_lvl, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'osd', 1);
-INSERT INTO vacancy(position, education_lvl, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lol', 0);
-INSERT INTO vacancy(position, education_lvl, salary, company, insurance, description) VALUES ('teacher', 'higher', 60000, 'osd', 0, 'cool');
-INSERT INTO vacancy(position, education_lvl, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'osd', 1, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'GOOGLE', 1, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'osd', 1);
+INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lol', 0);
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60000, 'osd', 0, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'osd', 1, 'cool');
                                      
                                      
 -- ************************
@@ -95,7 +96,8 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 --RETURNS TABLE
 
 --RETURN(
---        SELECT education_lvl, salary, company, insurance FROM vacancy WHERE position = @position -- ORDER BY salary DESC
+--        SELECT education_lvl, salary, company, insurance FROM vacancy WHERE position = @position GROUP BY salary, insurance 
+--        ORDER BY salary DESC
 --);
 
 
@@ -123,6 +125,9 @@ SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(p
     FROM person, vacancy
     WHERE vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; -- ЧТО НЕ ТАК?
     
+SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants
+    FROM person INNER JOIN vacancy ON vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; --SRSL?
+    
     
     
     
@@ -134,5 +139,7 @@ SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(p
 -- ************************
 -- ************************
 -- ************************   
-    
--- Собрать статистику в зависимости от образования и трудового стажа.
+   
+-- Собрать статистику в зависимости от образования и трудового стажа.   
+   
+SELECT education, seniority, COUNT(seniority) as job_applicants FROM person GROUP BY education, seniority;
