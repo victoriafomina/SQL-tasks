@@ -16,7 +16,7 @@ select @@version as 'sql server version'
 
 -- Таблица, представляющая человека, ищущего работу.
 CREATE TABLE person(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education_lvl NVARCHAR(25) NOT NULL, salary INT NOT NULL, 
-                    seniority INT NOT NULL,
+        seniority INT NOT NULL,            
         CHECK(education_lvl IN ('no', 'higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 'incomplete h.')));
         
                                
@@ -33,10 +33,10 @@ CREATE TABLE person_vacancy_bindings(id INT IDENTITY(1, 1) PRIMARY KEY, id_perso
                                      FOREIGN KEY (id_vacancy) REFERENCES vacancy(id) ON DELETE CASCADE ON UPDATE CASCADE);
                                      
 
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'higher', 80000, 1);
+INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'higher', 80000, 2);
 INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('ololo', 'no', 80000, 2);
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'secondary', 80000, 3);
-INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('progr', 'secondary', 70000, 1);
+INSERT INTO person(position, education_lvl, salary, seniority) VALUES ('teacher', 'secondary', 80000, 1);
+INSERT INTO person(position, education_lvl, salary,seniority) VALUES ('progr', 'secondary', 70000, 3);
 
                                      
                                      
@@ -120,7 +120,7 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
         
 -- Вывести сводку по всем профессиям: количество вакансий и количество предложений. Упорядочить по убыванию количества вакансий. 
 SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants 
-    FROM person, vacancy GROUP BY vacancy.position
+    FROM person, vacancy
     WHERE vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; -- ЧТО НЕ ТАК?
     
     
