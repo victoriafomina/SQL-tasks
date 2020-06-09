@@ -65,19 +65,6 @@ SELECT cast((SELECT COUNT(id) FROM person) AS float) / (SELECT COUNT(id) FROM va
 -- 3.    Какие компании предлагают вакансии с оплатой медицинской страховки?
 SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 
-                                     
-                                     
-
--- ************************
--- ************************
--- ************************
--- ПРОЦЕДУРА
--- ************************
--- ************************
--- ************************
-
-
-
 
 
 -- ************************
@@ -109,6 +96,14 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 -- ************************
 -- ************************
 
+-- Работодатель, независимо от агентства, отбирает одного из претендентов, который должен занять вакансию в базе данных агентства, 
+-- после этого аннулируются заявки на другие вакансии принятого на работу человека.
+
+GO
+CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
+FOR DELETE AS
+    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person = (SELECT id_person FROM deleted);
+
 
 
 
@@ -121,6 +116,7 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 -- ************************        
         
 -- Вывести сводку по всем профессиям: количество вакансий и количество предложений. Упорядочить по убыванию количества вакансий. 
+
 SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants 
     FROM person, vacancy
     WHERE vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; -- ЧТО НЕ ТАК?
