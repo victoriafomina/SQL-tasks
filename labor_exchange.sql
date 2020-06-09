@@ -30,7 +30,8 @@ CREATE TABLE vacancy(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NO
 -- Таблица, связывающая вакансии и подходящих для них людей.
 CREATE TABLE person_vacancy_bindings(id INT IDENTITY(1, 1) PRIMARY KEY, id_person INT, id_vacancy INT,
                                      FOREIGN KEY (id_person) REFERENCES person(id) ON DELETE CASCADE ON UPDATE CASCADE,
-                                     FOREIGN KEY (id_vacancy) REFERENCES vacancy(id) ON DELETE CASCADE ON UPDATE CASCADE);
+                                     FOREIGN KEY (id_vacancy) REFERENCES vacancy(id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                     UNIQUE (id_person, id_vacancy));
                                      
 
 INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'higher', 80000, 2);
@@ -42,10 +43,22 @@ INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'seco
                                      
                                      
 INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'GOOGLE', 1, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'osd', 1);
+INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lala', 1);
 INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lol', 0);
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60000, 'osd', 0, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'osd', 1, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60000, 'lala', 0, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'lala', 1, 'cool');
+
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 1);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 4);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 5);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(2, NULL);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(3, 1);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(3, 4);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(3, 5);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(4, 2);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(4, 3);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(5, 2);
+INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(5, 3);
                                      
                                      
 -- ************************
@@ -77,7 +90,7 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 
 -- Вывести все вакансии на определенную должность. Упорядочить по убыванию з/платы.
 
-
+--НЕ КОМПИЛИТСЯ!!!
 --GO
 --CREATE FUNCTION VacanciesForPosition(@position NVARCHAR(30)) 
 --RETURNS TABLE
@@ -99,10 +112,20 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 -- Работодатель, независимо от агентства, отбирает одного из претендентов, который должен занять вакансию в базе данных агентства, 
 -- после этого аннулируются заявки на другие вакансии принятого на работу человека.
 
+SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
+
 GO
 CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
 FOR DELETE AS
     DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person = (SELECT id_person FROM deleted);
+
+
+SELECT 'OLOLO';
+
+DELETE FROM person_vacancy_bindings WHERE id_person = 3 AND id_vacancy = 5;
+    
+SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
+
 
 
 
