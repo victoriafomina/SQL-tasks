@@ -16,7 +16,7 @@ select @@version as 'sql server version'
 
 -- Таблица, представляющая человека, ищущего работу.
 CREATE TABLE person(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education_lvl NVARCHAR(25) NOT NULL, salary INT NOT NULL, 
-                    senioriry INT NOT NULL,
+                    seniority INT NOT NULL,
         CHECK(education_lvl IN ('no', 'higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 'incomplete h.')));
         
                                
