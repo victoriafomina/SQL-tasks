@@ -34,6 +34,7 @@ CREATE TABLE person_vacancy_bindings(id INT IDENTITY(1, 1) PRIMARY KEY, id_perso
                                      UNIQUE (id_person, id_vacancy));
                                      
 
+-- Заполняем таблицу с людьми, ищущими работу.
 INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'higher', 80, 2);
 INSERT INTO person(position, education, salary, seniority) VALUES ('ololo', 'no', 80, 2);
 INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'secondary', 80, 1);
@@ -41,7 +42,7 @@ INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'seco
 INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 90, 3);
 
                                      
-                                     
+-- Заполняем таблицу с вакансиями.                                     
 INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'GOOGLE', 1, 'cool');
 INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lala', 1);
 INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lol', 0);
@@ -90,21 +91,21 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 
 -- Вывести все вакансии на определенную должность. Упорядочить по убыванию з/платы.
 
--- Не сортирует!!!
-
 GO
 CREATE FUNCTION VacanciesForPosition(@position NVARCHAR(30)) 
 RETURNS @result_table TABLE(education NVARCHAR(30), salary INT, company NVARCHAR(30), insurance INT)
 AS
 BEGIN
-    INSERT INTO @result_table 
+    INSERT INTO @result_table
 	SELECT education, salary, company, insurance FROM vacancy GROUP BY education, salary, company, insurance ORDER BY salary DESC;
-	return;
+	RETURN;
 END
 GO
 
+SELECT * FROM VacanciesForPosition('teacher') ORDER BY salary DESC;
 
 
+-- ТРИГГЕР ТРИГГЕРНУЛСЯ
 
 -- ************************
 -- ************************
@@ -119,10 +120,10 @@ GO
 
 SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 
---GO
---CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
---FOR DELETE AS
---    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person = (SELECT id_person FROM deleted);
+GO
+CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
+FOR DELETE AS
+    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person (SELECT id_person FROM deleted);
 
 
 SELECT 'OLOLO';
@@ -145,12 +146,14 @@ SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
         
 -- Вывести сводку по всем профессиям: количество вакансий и количество предложений. Упорядочить по убыванию количества вакансий. 
 
-SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants 
-    FROM person, vacancy
-    WHERE vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; -- ЧТО НЕ ТАК?
+--GO
+--CREATE VIEW OccupationalSummary AS
+--SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants
+--    FROM person INNER JOIN vacancy ON vacancy.position = person.position GROUP BY vacancy.position;-- ORDER BY vacancy.position DESC; --SRSL?
+
+
     
-SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants
-    FROM person INNER JOIN vacancy ON vacancy.position = person.position GROUP BY vacancy.position ORDER BY vacancy.position DESC; --SRSL?
+
     
     
     
@@ -166,4 +169,4 @@ SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(p
    
 -- Собрать статистику в зависимости от образования и трудового стажа.   
    
-SELECT education, seniority, COUNT(seniority) as job_applicants FROM person GROUP BY education, seniority;
+SELECT education, seniority, COUNT(seniority) AS job_applicants FROM person GROUP BY education, seniority;
