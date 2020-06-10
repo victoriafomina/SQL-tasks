@@ -34,19 +34,19 @@ CREATE TABLE person_vacancy_bindings(id INT IDENTITY(1, 1) PRIMARY KEY, id_perso
                                      UNIQUE (id_person, id_vacancy));
                                      
 
-INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'higher', 80000, 2);
-INSERT INTO person(position, education, salary, seniority) VALUES ('ololo', 'no', 80000, 2);
-INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'secondary', 80000, 1);
-INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 70000, 3);
-INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 90000, 3);
+INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'higher', 80, 2);
+INSERT INTO person(position, education, salary, seniority) VALUES ('ololo', 'no', 80, 2);
+INSERT INTO person(position, education, salary, seniority) VALUES ('teacher', 'secondary', 80, 1);
+INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 70, 3);
+INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'secondary', 90, 3);
 
                                      
                                      
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'GOOGLE', 1, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lala', 1);
-INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70000, 'lol', 0);
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60000, 'lala', 0, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80000, 'lala', 1, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'GOOGLE', 1, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lala', 1);
+INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lol', 0);
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60, 'lala', 0, 'cool');
+INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'lala', 1, 'cool');
 
 INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 1);
 INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 4);
@@ -90,9 +90,11 @@ SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
 
 -- Вывести все вакансии на определенную должность. Упорядочить по убыванию з/платы.
 
+-- Не сортирует!!!
+
 GO
 CREATE FUNCTION VacanciesForPosition(@position NVARCHAR(30)) 
-RETURNS @result_table TABLE(education NVARCHAR(30), salary INT, company NVARCHAR(30), insurance INT) 
+RETURNS @result_table TABLE(education NVARCHAR(30), salary INT, company NVARCHAR(30), insurance INT)
 AS
 BEGIN
     INSERT INTO @result_table 
@@ -165,6 +167,3 @@ SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(p
 -- Собрать статистику в зависимости от образования и трудового стажа.   
    
 SELECT education, seniority, COUNT(seniority) as job_applicants FROM person GROUP BY education, seniority;
-
-
-SELECT * FROM VacanciesForPosition('teacher'); 
