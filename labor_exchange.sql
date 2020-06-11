@@ -100,7 +100,7 @@ RETURNS @result_table TABLE(education NVARCHAR(30), salary INT, company NVARCHAR
 AS
 BEGIN
     INSERT INTO @result_table
-	SELECT education, salary, company, insurance FROM vacancy GROUP BY education, salary, company, insurance ORDER BY salary DESC;
+	SELECT education, salary, company, insurance FROM vacancy WHERE pos = @position GROUP BY education, salary, company, insurance ORDER BY salary DESC;
 	RETURN;
 END
 GO
