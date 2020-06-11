@@ -120,10 +120,10 @@ SELECT * FROM VacanciesForPosition('teacher') ORDER BY salary DESC;
 
 SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 
-GO
-CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
-FOR DELETE AS
-    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person (SELECT id_person FROM deleted);
+--GO
+--CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
+--FOR DELETE AS
+--    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person (SELECT id_person FROM deleted);
 
 
 SELECT 'OLOLO';
@@ -148,14 +148,10 @@ SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 
 --GO
 --CREATE VIEW OccupationalSummary AS
---SELECT vacancy.position, COUNT(vacancy.position) AS number_of_vacancies, COUNT(person.position) AS job_applicants
---    FROM person INNER JOIN vacancy ON vacancy.position = person.position GROUP BY vacancy.position;-- ORDER BY vacancy.position DESC; --SRSL?
 
-
-    
-
-    
-    
+SELECT * FROM (SELECT position, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY position) "v1"
+FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".position = "v2".position
+ORDER BY "v1".numberOfThePositionVacansy DESC;
     
     
     
