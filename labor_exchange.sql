@@ -21,7 +21,7 @@ CREATE TABLE person(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT
         
                                
 -- Таблица, представляющая вакансию.                               
-CREATE TABLE vacancy(id INT IDENTITY(1, 1) PRIMARY KEY, position NVARCHAR(30) NOT NULL, education NVARCHAR(30) NOT NULL, salary INT NOT NULL,
+CREATE TABLE vacancy(id INT IDENTITY(1, 1) PRIMARY KEY, pos NVARCHAR(30) NOT NULL, education NVARCHAR(30) NOT NULL, salary INT NOT NULL,
                      company NVARCHAR(30) NOT NULL, insurance INT NOT NULL, description NVARCHAR(200),
                      CHECK(education IN ('higher', 'secondary', 'secondary special', 'secondary sp.', 'sec. sp.', 'incomplete higher', 
                                              'incomplete h.', 'no') AND insurance IN (0, 1)));
@@ -43,11 +43,11 @@ INSERT INTO person(position, education, salary,seniority) VALUES ('progr', 'seco
 
                                      
 -- Заполняем таблицу с вакансиями.                                     
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'GOOGLE', 1, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lala', 1);
-INSERT INTO vacancy(position, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lol', 0);
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60, 'lala', 0, 'cool');
-INSERT INTO vacancy(position, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'lala', 1, 'cool');
+INSERT INTO vacancy(pos, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'GOOGLE', 1, 'cool');
+INSERT INTO vacancy(pos, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lala', 1);
+INSERT INTO vacancy(pos, education, salary, company, insurance) VALUES ('progr', 'secondary', 70, 'lol', 0);
+INSERT INTO vacancy(pos, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 60, 'lala', 0, 'cool');
+INSERT INTO vacancy(pos, education, salary, company, insurance, description) VALUES ('teacher', 'higher', 80, 'lala', 1, 'cool');
 
 INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 1);
 INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(1, 4);
@@ -71,13 +71,16 @@ INSERT INTO person_vacancy_bindings(id_person, id_vacancy) VALUES(5, 3);
 -- ************************
                                      
 -- 1.    Количество вакансий на каждую специальность.
-SELECT position, COUNT(position) AS count FROM vacancy GROUP BY position;
+SELECT pos, COUNT(pos) AS count FROM vacancy GROUP BY pos;
 
 -- 2.    Среднее количество человек (а не заявок!) на одну вакансию.
 SELECT cast((SELECT COUNT(id) FROM person) AS float) / (SELECT COUNT(id) FROM vacancy) AS avg_num_of_people_for_vacancy;
 
 -- 3.    Какие компании предлагают вакансии с оплатой медицинской страховки?
 SELECT company AS company_with_insurance FROM vacancy WHERE insurance = 1;
+
+-- Собрать статистику в зависимости от образования и трудового стажа.    
+SELECT education, seniority, COUNT(seniority) AS job_applicants FROM person GROUP BY education, seniority;
 
 
 
@@ -120,10 +123,10 @@ SELECT * FROM VacanciesForPosition('teacher') ORDER BY salary DESC;
 
 SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 
---GO
---CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
---FOR DELETE AS
---    DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person (SELECT id_person FROM deleted);
+GO
+CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
+FOR DELETE AS
+   DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person = (SELECT id_person FROM deleted);
 
 
 SELECT 'OLOLO';
@@ -148,21 +151,16 @@ SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 
 --GO
 --CREATE VIEW OccupationalSummary AS
+--SELECT * FROM (SELECT position, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY position) "v1"
+--FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".position = "v2".position;
+----ORDER BY "v1".numberOfThePositionVacansy DESC;
+--GO
 
-SELECT * FROM (SELECT position, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY position) "v1"
-FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".position = "v2".position
-ORDER BY "v1".numberOfThePositionVacansy DESC;
-    
-    
-    
--- ************************
--- ************************
--- ************************
--- СТАТИСТИКА
--- ************************
--- ************************
--- ************************   
-   
--- Собрать статистику в зависимости от образования и трудового стажа.   
-   
-SELECT education, seniority, COUNT(seniority) AS job_applicants FROM person GROUP BY education, seniority;
+--SELECT * FROM OccupationalSummary;
+
+GO
+CREATE VIEW OccupationalSummary AS
+SELECT * FROM (SELECT pos, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY pos) "v1"
+FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".pos = "v2".position;
+--ORDER BY "v1".numberOfThePositionVacansy DESC;
+GO
