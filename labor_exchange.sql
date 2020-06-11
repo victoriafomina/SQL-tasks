@@ -153,7 +153,6 @@ GO
 CREATE VIEW OccupationalSummary AS
 SELECT * FROM (SELECT pos, COUNT(*) AS numberOfTPositionVacancy FROM vacancy group BY pos) "v1"
 FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfPositionPerson FROM person group BY position) "v2" ON "v1".pos = "v2".position;
---ORDER BY "v1".numberOfThePositionVacansy DESC;
 GO
 
 SELECT * FROM OccupationalSummary ORDER BY (numberOfTPositionVacancy) DESC;
