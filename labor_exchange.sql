@@ -149,18 +149,11 @@ SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
         
 -- Вывести сводку по всем профессиям: количество вакансий и количество предложений. Упорядочить по убыванию количества вакансий. 
 
---GO
---CREATE VIEW OccupationalSummary AS
---SELECT * FROM (SELECT position, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY position) "v1"
---FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".position = "v2".position;
-----ORDER BY "v1".numberOfThePositionVacansy DESC;
---GO
-
---SELECT * FROM OccupationalSummary;
-
 GO
 CREATE VIEW OccupationalSummary AS
-SELECT * FROM (SELECT pos, COUNT(*) AS numberOfThePositionVacansy FROM vacancy group BY pos) "v1"
-FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfThePositionPerson FROM person group BY position) "v2" ON "v1".pos = "v2".position;
+SELECT * FROM (SELECT pos, COUNT(*) AS numberOfTPositionVacancy FROM vacancy group BY pos) "v1"
+FULL OUTER JOIN (SELECT position, COUNT(*) AS numberOfPositionPerson FROM person group BY position) "v2" ON "v1".pos = "v2".position;
 --ORDER BY "v1".numberOfThePositionVacansy DESC;
 GO
+
+SELECT * FROM OccupationalSummary ORDER BY (numberOfTPositionVacancy) DESC;
