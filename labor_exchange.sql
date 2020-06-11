@@ -126,9 +126,9 @@ SELECT id, id_person, id_vacancy FROM person_vacancy_bindings;
 GO
 CREATE TRIGGER employedRemoveApplications ON person_vacancy_bindings
 FOR DELETE AS
-   DELETE FROM person_vacancy_bindings WHERE person_vacancy_bindings.id_person = (SELECT id_person FROM deleted);
+   DELETE FROM person_vacancy_bindings WHERE EXISTS (SELECT id_person FROM deleted WHERE id_person = person_vacancy_bindings.id_person);
 
-
+-- trigger testing
 SELECT 'OLOLO';
 
 DELETE FROM person_vacancy_bindings WHERE id_person = 3 AND id_vacancy = 5;
